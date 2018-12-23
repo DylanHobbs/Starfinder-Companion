@@ -1,0 +1,99 @@
+{
+    "charecter" : {
+        "version": 1,
+        "info" : {
+            "name": "Borris",
+            "speed": 30,
+            "race": "Lashunta",
+            "theme": "Bounty Hunter",
+            "klass": "Solarian",
+            "level": 1,
+            "xp": 0,
+            "description": "Part of a 2 person assassin team that specialises in hunting and killing with very little intformation",
+            "languages": ["Common", "Thieves Cant"],
+            "allignment": "Good",
+            "diety": false,
+            "money": 1000
+        },
+        "klass": {
+            "maxHP": 10,
+            "historic_max_hp": {
+                "1": 10
+            },
+            "currentHP": 10,
+            "EAC": 10,
+            "KAC": 10,
+            "keyAbility": "Dex",
+            "carrying_cap": 100,
+            "attack_bonus": {
+                "melee": 0,
+                "ranged": 2,
+                "thrown": 1
+            }
+        },
+        "stats": {
+            "Strength": {
+                "score": 10,
+                "saving": 10
+            },
+            "Dexterity": {
+                "score": 10,
+                "saving": 10
+            },
+            "Constitution": {
+                "score": 10,
+                "saving": 10
+            },
+            "Intelligence": {
+                "score": 10,
+                "saving": 10
+            },
+            "Wisdom": {
+                "score": 10,
+                "saving": 10
+            },
+            "Charisma": {
+                "score": 10,
+                "saving": 10
+            }
+        },
+        "skills": {
+            "Acrobatics": 1,
+            "Athletics": 1,
+            "Bluff": 1,
+            "Computers": 1,
+            "Culture": 1,
+            "Diplomacy": 1,
+            "Disguise": 1,
+            "Engineering": 1,
+            "Intimidate": 1,
+            "Life_Science": 1,
+            "Medicine": 1,
+            "Mysticism": 1,
+            "Perception": 1,
+            "Physical_Science": 1,
+            "Piloting": 1,
+            "Profession": 1,
+            "Sense_Motive": 1,
+            "Sleight_of_Hand": 1,
+            "Stealth": 1,
+            "Survival": 1
+        },
+        "weapons": {
+            "Weapon": {
+                "name": "Sniper",
+                "damage": "1d10",
+                "attack_bonus": 5,
+                "damage_type": "P",
+                "desc": "A sniper made from steller energy bestowed upon Borris by alien creatues."
+            }
+        },
+        "items": {
+            "item": {
+                "name": "Ammo",
+                "description": "Speical sniper rounds (100)",
+                "value": 100
+            }
+        }
+    }
+}
