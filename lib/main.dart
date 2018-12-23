@@ -97,11 +97,12 @@ class _FlutterDemoState extends State<FlutterDemo> {
     //     _counter = value;
     //   });
     // });
-    widget.storage.readCharecter().then((Charecter value){
-        setState(() {
-          toon = value;          
-        });
-    });
+    widget.storage.getFileData('toonRepo/data.json').then((f) => print(f));
+    // widget.storage.readCharecter().then((Charecter value){
+    //     setState(() {
+    //       toon = value;          
+    //     });
+    // });
   }
 
   Future<File> _incrementCounter() async {
@@ -125,7 +126,7 @@ class _FlutterDemoState extends State<FlutterDemo> {
               child: new Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  new Text("Name: " + toon.info.name),
+                  new Text("Name: " + (toon?.info?.name ?? 'foo')),
                 ],
               ),
             );
