@@ -1,138 +1,137 @@
+// Base dart shtuff
 import 'dart:async';
-import 'dart:io';
 
+// Packages
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'charecter.dart';
-import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
+// User defined classes
+import 'charecter.dart';
+import 'charecterStorage.dart';
+
+/*
+  Main function.
+  Overall themes are defined here as well as starting point and material 
+  widgets. (navigation, app bar ect)
+*/
 void main() {
-  runApp(
-    MaterialApp(
-      title: 'Reading and Writing Files',
-      home: FlutterDemo(storage: CounterStorage()),
-    ),
-  );
+  runApp(new MaterialApp(
+    title: "Statfinder Companion",
+    theme: ThemeData(
+        // Define the default Brightness and Colors
+        brightness: Brightness.dark,
+        primaryColor: Colors.cyan[200],
+        accentColor: Colors.cyan[600],
+
+        // Define the default Font Family
+        fontFamily: 'Montserrat',
+
+        // Define the default TextTheme. Use this to specify the default
+        // text styling for headlines, titles, bodies of text, and more.
+        textTheme: TextTheme(
+          headline: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+          title: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+          body1: TextStyle(fontSize: 20.0, fontFamily: 'Hind'),
+        ),
+      ),
+    home: Scaffold(
+        appBar: AppBar(
+          title: Text('Starfinder Companion'),
+        ),
+        body: Center(
+          child: Starfinder(storage: CharecterStorage()),
+        )
+    )
+  ));
 }
 
-class CounterStorage {
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
-  }
-
-  Future<String> getFileData(String path) async {
-    return await rootBundle.loadString(path);
-  }
-
-  Future<File> get _localFile async {
-    final path = await _localPath;
-    final file = File('$path/toon_test_3.json');
-    bool exists = file.existsSync();
-    if(exists){
-      return file;
-    } else {
-      // Load the default file
-      final newfile = await getFileData('toonRepo/data.json');
-      return file.writeAsString(newfile);
-    }
-  }
-
-  Future<int> readCounter() async {
-    try {
-      final file = await _localFile;
-
-      // Read the file
-      String contents = await file.readAsString();
-
-      return int.parse(contents);
-    } catch (e) {
-      // If we encounter an error, return 0
-      return 0;
-    }
-  }
-
-  Future<Charecter> readCharecter() async {
-    try {
-      final file = await _localFile;
-
-      // Read the file
-      String contents = await file.readAsString();
-      Map charecterMap = jsonDecode(contents);
-      Charecter toon = Charecter.fromJson(charecterMap);
-      return toon;
-    } catch (e) {
-      throw new Exception("There was an error loading your toon");
-    }
-  }
-
-  Future<File> writeCounter(int counter) async {
-    final file = await _localFile;
-
-    // Write the file
-    return file.writeAsString('$counter');
-  }
-}
-
-class FlutterDemo extends StatefulWidget {
-  final CounterStorage storage;
-
-  FlutterDemo({Key key, @required this.storage}) : super(key: key);
+class Starfinder extends StatefulWidget {
+  final CharecterStorage storage;
+  Starfinder({Key key, @required this.storage}) : super(key: key);
 
   @override
-  _FlutterDemoState createState() => _FlutterDemoState();
+  StarfinderState createState() => new StarfinderState();
 }
 
-class _FlutterDemoState extends State<FlutterDemo> {
-  int _counter;
+class StarfinderState extends State<Starfinder> {
+  List data;
   Charecter toon;
 
   @override
   void initState() {
     super.initState();
-    // widget.storage.readCounter().then((int value) {
-    //   setState(() {
-    //     _counter = value;
-    //   });
-    // });
-    widget.storage.getFileData('toonRepo/data.json').then((f) => print(f));
-    // widget.storage.readCharecter().then((Charecter value){
-    //     setState(() {
-    //       toon = value;          
-    //     });
-    // });
+    widget.storage.readCharecter().then((Charecter value){
+        setState(() {
+          toon = value;      
+        });
+    });
   }
 
-  Future<File> _incrementCounter() async {
-    setState(() {
-      _counter++;
-    });
 
-    // write the variable as a string to the file
-    return widget.storage.writeCounter(_counter);
+  Widget toonData() {
+    return new FutureBuilder<Charecter>(
+      future: widget.storage.readCharecter(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return new ListView(
+            children: <Widget>[
+              TextField(
+                decoration: new InputDecoration(
+                  labelText: "Name:",
+                  fillColor: Colors.cyanAccent,
+                  border: new OutlineInputBorder(
+                    borderRadius: new BorderRadius.circular(25.0),
+                  ),
+                  //fillColor: Colors.green
+                ),
+                keyboardType: TextInputType.text,
+                style: new TextStyle(
+                  fontFamily: "Poppins",
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.description),
+                title: Text("Description: " + (snapshot.data.info.description)),
+              ),
+              ListTile(
+                leading: Icon(Icons.arrow_right),
+                title: Text("Class: " + (snapshot.data.info.klass)),
+              ),
+              ListTile(
+                leading: Icon(Icons.format_paint),
+                title: Text("Theme: " + (snapshot.data.info.theme)),
+              ),
+            ],
+          );
+        } else if (snapshot.hasError) {
+          return new Text("${snapshot.error}");
+        }
+        return new CircularProgressIndicator();
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Reading and Writing Files')),
-      body: Center(
-        child: ListView.builder(
-          // Build the ListView
-          itemBuilder: (BuildContext context, int index) {
-            return new Card(
-              child: new Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  new Text("Name: " + (toon?.info?.name ?? 'foo')),
-                ],
-              ),
-            );
-          }
-        ),
-      ),
+    return new Material(
+    child: new Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children:<Widget>[
+          Flexible(
+            child: toonData(),
+          )
+        ]
+    )
     );
   }
+}
+
+Future<String> _loadChar() async {
+  return await rootBundle.loadString('toon_repo/data.json');
+}
+
+Future loadChar() async {
+  String toon = await _loadChar();
+  return toon;
 }
