@@ -75,6 +75,7 @@ class StarfinderState extends State<Starfinder> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return new ListView(
+            padding: new EdgeInsets.all(7.0),
             children: <Widget>[
               ListTile(
                 leading: Icon(Icons.person),
