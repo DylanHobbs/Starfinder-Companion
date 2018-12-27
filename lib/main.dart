@@ -76,32 +76,74 @@ class StarfinderState extends State<Starfinder> {
         if (snapshot.hasData) {
           return new ListView(
             children: <Widget>[
-              TextField(
-                decoration: new InputDecoration(
-                  labelText: "Name:",
-                  fillColor: Colors.cyanAccent,
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(25.0),
+              ListTile(
+                leading: Icon(Icons.person),
+                title: TextField(
+                  decoration: new InputDecoration(
+                    labelText: "Name:",
+                    fillColor: Colors.cyanAccent,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(25.0),
+                    ),
                   ),
-                  //fillColor: Colors.green
+                  keyboardType: TextInputType.text,
+                  style: new TextStyle(
+                    fontFamily: "Poppins",
+                  ),
                 ),
-                keyboardType: TextInputType.text,
-                style: new TextStyle(
-                  fontFamily: "Poppins",
                 ),
-              ),
               ListTile(
                 leading: Icon(Icons.description),
-                title: Text("Description: " + (snapshot.data.info.description)),
-              ),
+                title: TextField(
+                  decoration: new InputDecoration(
+                    labelText: "Description:",
+                    fillColor: Colors.cyanAccent,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(25.0),
+                    ),
+                  ),
+                  keyboardType: TextInputType.text,
+                  style: new TextStyle(
+                    fontFamily: "Poppins",
+                  ),
+                ),
+                ),
               ListTile(
-                leading: Icon(Icons.arrow_right),
-                title: Text("Class: " + (snapshot.data.info.klass)),
-              ),
+                leading: Icon(Icons.label),
+                title: TextField(
+                  decoration: new InputDecoration(
+                    labelText: "Class:",
+                    fillColor: Colors.cyanAccent,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(25.0),
+                    ),
+                  ),
+                  keyboardType: TextInputType.text,
+                  style: new TextStyle(
+                    fontFamily: "Poppins",
+                  ),
+                ),
+                ),
               ListTile(
                 leading: Icon(Icons.format_paint),
-                title: Text("Theme: " + (snapshot.data.info.theme)),
-              ),
+                title: TextField(
+                  decoration: new InputDecoration(
+                    labelText: "Theme:",
+                    fillColor: Colors.cyanAccent,
+                    border: new OutlineInputBorder(
+                      borderRadius: new BorderRadius.circular(25.0),
+                    ),
+                  ),
+                  keyboardType: TextInputType.text,
+                  style: new TextStyle(
+                    fontFamily: "Poppins",
+                  ),
+                ),
+                ),
+              // ListTile(
+              //   leading: Icon(Icons.format_paint),
+              //   title: Text("Theme: " + (snapshot.data.info.theme)),
+              // ),
             ],
           );
         } else if (snapshot.hasError) {
