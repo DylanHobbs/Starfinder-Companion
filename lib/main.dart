@@ -9,6 +9,9 @@ import 'package:flutter/services.dart' show rootBundle;
 // User defined classes
 import 'charecter.dart';
 import 'charecterStorage.dart';
+import 'components/InputTextField.dart';
+import 'components/DropDownField.dart';
+import 'components/CharacterListItem.dart';
 
 /*
   Main function.
@@ -62,9 +65,9 @@ class StarfinderState extends State<Starfinder> {
   void initState() {
     super.initState();
     widget.storage.readCharecter().then((Charecter value){
-        setState(() {
-          toon = value;      
-        });
+      setState(() {
+        toon = value;
+      });
     });
   }
 
@@ -77,74 +80,28 @@ class StarfinderState extends State<Starfinder> {
           return new ListView(
             padding: new EdgeInsets.all(7.0),
             children: <Widget>[
-              ListTile(
-                leading: Icon(Icons.person),
-                title: TextField(
-                  decoration: new InputDecoration(
-                    labelText: "Name:",
-                    fillColor: Colors.cyanAccent,
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                    ),
-                  ),
-                  keyboardType: TextInputType.text,
-                  style: new TextStyle(
-                    fontFamily: "Poppins",
-                  ),
-                ),
-                ),
-              ListTile(
-                leading: Icon(Icons.description),
-                title: TextField(
-                  decoration: new InputDecoration(
-                    labelText: "Description:",
-                    fillColor: Colors.cyanAccent,
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                    ),
-                  ),
-                  keyboardType: TextInputType.text,
-                  style: new TextStyle(
-                    fontFamily: "Poppins",
-                  ),
-                ),
-                ),
-              ListTile(
-                leading: Icon(Icons.label),
-                title: TextField(
-                  decoration: new InputDecoration(
-                    labelText: "Class:",
-                    fillColor: Colors.cyanAccent,
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                    ),
-                  ),
-                  keyboardType: TextInputType.text,
-                  style: new TextStyle(
-                    fontFamily: "Poppins",
-                  ),
-                ),
-                ),
-              ListTile(
-                leading: Icon(Icons.format_paint),
-                title: TextField(
-                  decoration: new InputDecoration(
-                    labelText: "Theme:",
-                    fillColor: Colors.cyanAccent,
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(25.0),
-                    ),
-                  ),
-                  keyboardType: TextInputType.text,
-                  style: new TextStyle(
-                    fontFamily: "Poppins",
-                  ),
-                ),
-                ),
-              // ListTile(
-              //   leading: Icon(Icons.format_paint),
-              //   title: Text("Theme: " + (snapshot.data.info.theme)),
-              // ),
+              CharacterListItem(
+                toon.info.name,
+                toon.info.level,
+                toon.info.klass,
+              ),
+              CharacterListItem(
+                "Arny",
+                9999,
+                "Lifter"
+              ),
+              RaisedButton(
+                child: Icon(Icons.add_circle),
+                onPressed: () { return null; },
+                color: Colors.green,
+              ),
+// I commented out these input fields because I wanted to have the first screen be a list of all the
+// saved characters displayed in a card view, then the input fields are displayed in a popup menu when
+// the character creation button is hit.
+//              InputTextField(Icons.person, "Name", Colors.cyanAccent),
+//              InputTextField(Icons.description, "Description", Colors.cyanAccent),
+//              DropdownField(Icons.label, "Race"),
+//              DropdownField(Icons.format_paint, "Class"),
             ],
           );
         } else if (snapshot.hasError) {
