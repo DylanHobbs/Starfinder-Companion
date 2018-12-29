@@ -60,49 +60,50 @@ class Starfinder extends StatefulWidget {
 class StarfinderState extends State<Starfinder> {
   List data;
   Charecter toon;
+  List<Charecter> toonList;
 
   @override
   void initState() {
     super.initState();
-    widget.storage.readCharecter().then((Charecter value){
+    widget.storage.readAllCharecters().then((List<Charecter> value){
       setState(() {
-        toon = value;
+        toonList = value;
       });
     });
+    // widget.storage.readCharecter().then((Charecter value){
+    //   setState(() {
+    //     toon = value;
+    //   });
+    // });
   }
 
+  List<Widget> createToonList(List<Charecter> toons)
+  {
+    List<Widget> toReturn = new List<Widget>();
+    for (Charecter item in toons) {
+      toReturn.add(CharacterListItem(
+        item.info.name, 
+        item.info.level, 
+        item.info.klass)
+      );
+    }
+    toReturn.add(RaisedButton(
+      child: Icon(Icons.add_circle),
+      onPressed: () { return null; },
+      color: Colors.green[400],
+      splashColor: Colors.cyan[200],
+    ));
+    return toReturn;
+  }
 
-  Widget toonData() {
-    return new FutureBuilder<Charecter>(
-      future: widget.storage.readCharecter(),
+  Widget listAllToons() {
+    return new FutureBuilder<List<Charecter>>(
+      future: widget.storage.readAllCharecters(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return new ListView(
             padding: new EdgeInsets.all(7.0),
-            children: <Widget>[
-              CharacterListItem(
-                toon.info.name,
-                toon.info.level,
-                toon.info.klass,
-              ),
-              CharacterListItem(
-                "Arny",
-                9999,
-                "Lifter"
-              ),
-              RaisedButton(
-                child: Icon(Icons.add_circle),
-                onPressed: () { return null; },
-                color: Colors.green,
-              ),
-// I commented out these input fields because I wanted to have the first screen be a list of all the
-// saved characters displayed in a card view, then the input fields are displayed in a popup menu when
-// the character creation button is hit.
-//              InputTextField(Icons.person, "Name", Colors.cyanAccent),
-//              InputTextField(Icons.description, "Description", Colors.cyanAccent),
-//              DropdownField(Icons.label, "Race"),
-//              DropdownField(Icons.format_paint, "Class"),
-            ],
+            children: createToonList(snapshot.data),
           );
         } else if (snapshot.hasError) {
           return new Text("${snapshot.error}");
@@ -119,7 +120,7 @@ class StarfinderState extends State<Starfinder> {
         mainAxisAlignment: MainAxisAlignment.center,
         children:<Widget>[
           Flexible(
-            child: toonData(),
+            child: listAllToons(),
           )
         ]
     )
@@ -127,11 +128,12 @@ class StarfinderState extends State<Starfinder> {
   }
 }
 
-Future<String> _loadChar() async {
-  return await rootBundle.loadString('toon_repo/data.json');
-}
 
-Future loadChar() async {
-  String toon = await _loadChar();
-  return toon;
-}
+// Future<String> _loadChar() async {
+//   return await rootBundle.loadString('toon_repo/data.json');
+// }
+
+// Future loadChar() async {
+//   String toon = await _loadChar();
+//   return toon;
+// }

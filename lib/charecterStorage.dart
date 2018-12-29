@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
@@ -7,9 +6,36 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
 class CharecterStorage {
+  String currentCharecterPath;
+  List<String> fileList;
+
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
+    String json_path = directory.path + "/toons";
+    return json_path;
+  }
+
+  Future<List<Charecter>> readAllCharecters() async {
+    final path = await _localPath;
+    Directory dir  = Directory(path);
+    bool exists = dir.existsSync();
+    if(exists == true){
+      // Toon dir hasn't been setup yet, make it now.
+      new Directory(path).create(recursive: true);
+
+      // Write a default file to the folder
+      File defaultToon = File('$path/defaultToon');
+      final newfile = await getFileData('toonRepo/data.json');
+      defaultToon.writeAsString(newfile);
+    } 
+    List<FileSystemEntity> _files;
+    List<Charecter> toonList = [];
+    _files = dir.listSync(recursive: true, followLinks: false);
+    for (var file in _files) {
+      Charecter toon = await readCharecter(file);
+      toonList.add(toon);
+    }
+    return toonList;
   }
 
   Future<String> getFileData(String path) async {
@@ -18,7 +44,7 @@ class CharecterStorage {
 
   Future<File> get _localFile async {
     final path = await _localPath;
-    final file = File('$path/toon_test_3.json');
+    final file = File('$path/toon_test_4.json');
     bool exists = file.existsSync();
     if(exists){
       return file;
@@ -29,9 +55,11 @@ class CharecterStorage {
     }
   }
 
-  Future<Charecter> readCharecter() async {
+  Future<Charecter> readCharecter([File file]) async {
     try {
-      final file = await _localFile;
+      if(file == null){
+        final file = await _localFile;        
+      }
 
       // Read the file
       String contents = await file.readAsString();
@@ -50,5 +78,9 @@ class CharecterStorage {
 
     // Write the file
     return file.writeAsString('$counter');
+  }
+
+  void updateCurrentCharecter(String path){
+    this.currentCharecterPath = path;
   }
 }
