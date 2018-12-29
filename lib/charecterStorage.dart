@@ -8,6 +8,7 @@ import 'package:flutter/services.dart' show rootBundle;
 class CharecterStorage {
   String currentCharecterPath;
   List<String> fileList;
+  Map<Charecter, File> fileToToonMap = new Map();
 
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
@@ -19,7 +20,7 @@ class CharecterStorage {
     final path = await _localPath;
     Directory dir  = Directory(path);
     bool exists = dir.existsSync();
-    if(exists == true){
+    if(exists == false){
       // Toon dir hasn't been setup yet, make it now.
       new Directory(path).create(recursive: true);
 
@@ -28,18 +29,24 @@ class CharecterStorage {
       final newfile = await getFileData('toonRepo/data.json');
       defaultToon.writeAsString(newfile);
     } 
-    List<FileSystemEntity> _files;
     List<Charecter> toonList = [];
-    _files = dir.listSync(recursive: true, followLinks: false);
-    for (var file in _files) {
+    List<FileSystemEntity> _files = getAllFilesData(dir);
+    for (File file in _files) {
       Charecter toon = await readCharecter(file);
       toonList.add(toon);
+
+      // Add it to our file to toon mapping, used for updating and deleting.
+      fileToToonMap.putIfAbsent(toon, ()=>file);
     }
     return toonList;
   }
 
   Future<String> getFileData(String path) async {
     return await rootBundle.loadString(path);
+  }
+
+  List<FileSystemEntity> getAllFilesData(Directory dir) {
+    return dir.listSync(recursive: true, followLinks: false);
   }
 
   Future<File> get _localFile async {

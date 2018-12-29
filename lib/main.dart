@@ -12,6 +12,7 @@ import 'charecterStorage.dart';
 import 'components/InputTextField.dart';
 import 'components/DropDownField.dart';
 import 'components/CharacterListItem.dart';
+import 'components/ToonCreator.dart';
 
 /*
   Main function.
@@ -61,6 +62,9 @@ class StarfinderState extends State<Starfinder> {
   List data;
   Charecter toon;
   List<Charecter> toonList;
+  final _formKey = GlobalKey<FormState>();
+
+
 
   @override
   void initState() {
@@ -89,7 +93,7 @@ class StarfinderState extends State<Starfinder> {
     }
     toReturn.add(RaisedButton(
       child: Icon(Icons.add_circle),
-      onPressed: () { return null; },
+      onPressed: _AddCharecter,
       color: Colors.green[400],
       splashColor: Colors.cyan[200],
     ));
@@ -103,7 +107,7 @@ class StarfinderState extends State<Starfinder> {
         if (snapshot.hasData) {
           return new ListView(
             padding: new EdgeInsets.all(7.0),
-            children: createToonList(snapshot.data),
+            children: createToonList(toonList),
           );
         } else if (snapshot.hasError) {
           return new Text("${snapshot.error}");
@@ -125,15 +129,24 @@ class StarfinderState extends State<Starfinder> {
         ]
     )
     );
+  }  
+
+  Widget _AddCharecter() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return new Scaffold(
+        // Appbar
+          appBar: new AppBar(
+            // Title
+            title: new Text("Charecter Creator"),
+          ),
+          body: new ToonCreation(),
+        );
+      }
+    );
+    // return new ToonCreation();  
   }
 }
 
-
-// Future<String> _loadChar() async {
-//   return await rootBundle.loadString('toon_repo/data.json');
-// }
-
-// Future loadChar() async {
-//   String toon = await _loadChar();
-//   return toon;
-// }
