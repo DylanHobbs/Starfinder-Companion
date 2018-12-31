@@ -7,51 +7,56 @@ class ToonCreationState extends State<ToonCreation> {
 
   List<Step> steps = [
     new Step(
-        // Title of the Step
-        title: new Text("Info"),
-        // Content, it can be any widget here. Using basic Text for this example
-        content: new Form(
-                child: ListView(
-                  padding: new EdgeInsets.all(10.0),
-                  shrinkWrap: true,
-                  children: <Widget>[
-                    InputTextField(Icons.person, "Name", Colors.cyanAccent),
-                    InputTextField(Icons.description, "Description", Colors.cyanAccent),
-                    DropdownField(Icons.label, "Race"),
-                    DropdownField(Icons.format_paint, "Class"),
-                  ],
-                ),
-              ),
-        isActive: true),
+      // Title of the Step
+      title: new Text("Info"),
+      // Content, it can be any widget here. Using basic Text for this example
+      content: new Form(
+        child: ListView(
+          padding: new EdgeInsets.all(10.0),
+          shrinkWrap: true,
+          children: <Widget>[
+            InputTextField(Icons.person, "Name", Colors.cyanAccent),
+            InputTextField(Icons.description, "Description", Colors.cyanAccent),
+            DropdownField(Icons.label, "Race"),
+            DropdownField(Icons.format_paint, "Class"),
+          ],
+        ),
+      ),
+      state: StepState.editing,
+      isActive: true
+    ),
     new Step(
-        title: new Text("Stats"),
-        content: new Form(
-                child: ListView(
-                  padding: new EdgeInsets.all(10.0),
-                  shrinkWrap: true,
-                  children: <Widget>[
-                    InputTextField(Icons.camera, "Str", Colors.cyanAccent),
-                    InputTextField(Icons.donut_large, "Con", Colors.cyanAccent),
-                    InputTextField(Icons.drag_handle, "Dex", Colors.cyanAccent),
-                    InputTextField(Icons.book, "Int", Colors.cyanAccent),
-                    InputTextField(Icons.wifi, "Wis", Colors.cyanAccent),
-                    InputTextField(Icons.thumbs_up_down, "Cha", Colors.cyanAccent),
-                  ],
-                ),
-              ),
+      title: new Text("Stats"),
+      content: new Form(
+        child: ListView(
+          padding: new EdgeInsets.all(10.0),
+          shrinkWrap: true,
+          children: <Widget>[
+            InputTextField(Icons.camera, "Str", Colors.cyanAccent),
+            InputTextField(Icons.donut_large, "Con", Colors.cyanAccent),
+            InputTextField(Icons.drag_handle, "Dex", Colors.cyanAccent),
+            InputTextField(Icons.book, "Int", Colors.cyanAccent),
+            InputTextField(Icons.wifi, "Wis", Colors.cyanAccent),
+            InputTextField(Icons.thumbs_up_down, "Cha", Colors.cyanAccent),
+          ],
+        ),
+      ),
         // You can change the style of the step icon i.e number, editing, etc.
-        state: StepState.editing,
-        isActive: true),
+      state: StepState.editing,
+      isActive: true
+    ),
     new Step(
-        title: new Text("Step 3"),
-        content: new Text("Hello World!"),
-        isActive: true),
-];
+      title: new Text("Step 3"),
+      content: new Text("Hello World!"),
+      state: StepState.editing,
+      isActive: true
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
-      return new Scaffold(
-      body: new Container(
-          child: new Stepper(
+    return  new Container(
+      child: new Stepper(
         currentStep: this.currentStep,
         // List the steps you would like to have
         steps: steps,
@@ -98,7 +103,23 @@ class ToonCreationState extends State<ToonCreation> {
           // Log function call
           print("onStepContinue : " + currentStep.toString());
         },
-      )),
+        controlsBuilder: (BuildContext context, {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              RaisedButton(
+                onPressed: onStepCancel,
+                child: const Text("Cancel"),
+              ),
+              RaisedButton(
+                onPressed: onStepContinue,
+                child: const Text("Continue"),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

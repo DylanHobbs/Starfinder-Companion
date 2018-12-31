@@ -4,13 +4,10 @@ import 'dart:async';
 // Packages
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
 // User defined classes
 import 'charecter.dart';
 import 'charecterStorage.dart';
-import 'components/InputTextField.dart';
-import 'components/DropDownField.dart';
 import 'components/CharacterListItem.dart';
 import 'components/ToonCreator.dart';
 
@@ -74,11 +71,11 @@ class StarfinderState extends State<Starfinder> {
         toonList = value;
       });
     });
-    // widget.storage.readCharecter().then((Charecter value){
-    //   setState(() {
-    //     toon = value;
-    //   });
-    // });
+//     widget.storage.readCharecter().then((Charecter value){
+//       setState(() {
+//         toon = value;
+//       });
+//     });
   }
 
   List<Widget> createToonList(List<Charecter> toons)
