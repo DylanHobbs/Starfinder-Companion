@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'charecter.dart';
 import 'charecterStorage.dart';
 import 'components/CharacterListItem.dart';
-import 'components/ToonCreator.dart';
+import 'package:Starbuilder/views/characterCreator/ToonCreator.dart';
 
 /*
   Main function.
@@ -137,7 +137,7 @@ class StarfinderState extends State<Starfinder> {
         // Appbar
           appBar: new AppBar(
             // Title
-            title: new Text("Charecter Creator"),
+            title: new Text("Character Creator"),
           ),
           body: new ToonCreation(),
         );
