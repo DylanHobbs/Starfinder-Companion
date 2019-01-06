@@ -8,7 +8,7 @@ class ToonCreationState extends State<ToonCreation> {
   List<Step> steps = [
     new Step(
       // Title of the Step
-      title: new Text("CInfo"),
+      title: new Text("Info"),
       // Content, it can be any widget here. Using basic Text for this example
       content: CharacterOverview(),
       state: StepState.editing,

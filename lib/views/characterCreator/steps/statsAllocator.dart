@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:Starbuilder/views/characterCreator/steps/characterStats/custom.dart';
+import 'package:Starbuilder/views/characterCreator/steps/characterStats/pointBuy.dart';
+import 'package:Starbuilder/views/characterCreator/steps/characterStats/roll.dart';
 
 class CharacterStats extends StatefulWidget {
 
@@ -28,14 +30,14 @@ class _CharacterStatsState extends State<CharacterStats> {
         case 1: {
           _view = new Container(
             padding: EdgeInsets.all(20),
-            child: Text("Point Buy"),
+            child: new PointBuy(),
           );
         } break;
 
         case 2: {
           _view = new Container(
             padding: EdgeInsets.all(20),
-            child: Text("Roll"),
+            child: Roll(),
           );
         } break;
 
