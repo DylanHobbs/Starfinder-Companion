@@ -47,6 +47,22 @@ class _RollState extends State<Roll> {
     });
   }
 
+  void _moveElementDown(idx) {
+    setState(() {
+      String current = abilityList[idx];
+      abilityList[idx] = abilityList[(idx+1)%abilityList.length];
+      abilityList[(idx+1)%abilityList.length] = current;
+    });
+  }
+
+  void _moveElementUp(idx) {
+    setState(() {
+      String current = abilityList[idx];
+      abilityList[idx] = abilityList[(idx-1)%abilityList.length];
+      abilityList[(idx-1)%abilityList.length] = current;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -62,39 +78,39 @@ class _RollState extends State<Roll> {
                 children: <Widget>[
                   new ListTile(
                     dense: true,
-                    leading: new IconButton(icon: Icon(Icons.arrow_upward), onPressed: () {},),
-                    title: new Text("Strength: ${_scores["Str"]}", textAlign: TextAlign.center,),
-                    trailing: new IconButton(icon: Icon(Icons.arrow_downward), onPressed: () {},),
+                    leading: new IconButton(icon: Icon(Icons.arrow_upward), onPressed: () { _moveElementUp(0); },),
+                    title: new Text("${abilityList[0]}: ${_scores["Str"]}", textAlign: TextAlign.center,),
+                    trailing: new IconButton(icon: Icon(Icons.arrow_downward), onPressed: () { _moveElementDown(0); },),
                   ),
                   new ListTile(
                     dense: true,
-                    leading: new IconButton(icon: Icon(Icons.arrow_upward), onPressed: () {},),
-                    title: new Text("Dexterity: ${_scores["Dex"]}", textAlign: TextAlign.center,),
-                    trailing: new IconButton(icon: Icon(Icons.arrow_downward), onPressed: () {},),
+                    leading: new IconButton(icon: Icon(Icons.arrow_upward), onPressed: () { _moveElementUp(1); },),
+                    title: new Text("${abilityList[1]}: ${_scores["Dex"]}", textAlign: TextAlign.center,),
+                    trailing: new IconButton(icon: Icon(Icons.arrow_downward), onPressed: () { _moveElementDown(1); },),
                   ),
                   new ListTile(
                     dense: true,
-                    leading: new IconButton(icon: Icon(Icons.arrow_upward), onPressed: () {},),
-                    title: new Text("Constitution: ${_scores["Con"]}", textAlign: TextAlign.center,),
-                    trailing: new IconButton(icon: Icon(Icons.arrow_downward), onPressed: () {},),
+                    leading: new IconButton(icon: Icon(Icons.arrow_upward), onPressed: () { _moveElementUp(2); },),
+                    title: new Text("${abilityList[2]}: ${_scores["Con"]}", textAlign: TextAlign.center,),
+                    trailing: new IconButton(icon: Icon(Icons.arrow_downward), onPressed: () { _moveElementDown(2); },),
                   ),
                   new ListTile(
                     dense: true,
-                    leading: new IconButton(icon: Icon(Icons.arrow_upward), onPressed: () {},),
-                    title: new Text("Intelligence: ${_scores["Int"]}", textAlign: TextAlign.center,),
-                    trailing: new IconButton(icon: Icon(Icons.arrow_downward), onPressed: () {},),
+                    leading: new IconButton(icon: Icon(Icons.arrow_upward), onPressed: () { _moveElementUp(3); },),
+                    title: new Text("${abilityList[3]}: ${_scores["Int"]}", textAlign: TextAlign.center,),
+                    trailing: new IconButton(icon: Icon(Icons.arrow_downward), onPressed: () { _moveElementDown(3); },),
                   ),
                   new ListTile(
                     dense: true,
-                    leading: new IconButton(icon: Icon(Icons.arrow_upward), onPressed: () {},),
-                    title: new Text("Wisdom: ${_scores["Wis"]}", textAlign: TextAlign.center,),
-                    trailing: new IconButton(icon: Icon(Icons.arrow_downward), onPressed: () {},),
+                    leading: new IconButton(icon: Icon(Icons.arrow_upward), onPressed: () { _moveElementUp(4); },),
+                    title: new Text("${abilityList[4]}: ${_scores["Wis"]}", textAlign: TextAlign.center,),
+                    trailing: new IconButton(icon: Icon(Icons.arrow_downward), onPressed: () { _moveElementDown(4); },),
                   ),
                   new ListTile(
                     dense: true,
-                    leading: new IconButton(icon: Icon(Icons.arrow_upward), onPressed: () {},),
-                    title: new Text("Charisma: ${_scores["Cha"]}", textAlign: TextAlign.center,),
-                    trailing: new IconButton(icon: Icon(Icons.arrow_downward), onPressed: () {},),
+                    leading: new IconButton(icon: Icon(Icons.arrow_upward), onPressed: () { _moveElementUp(5); },),
+                    title: new Text("${abilityList[5]}: ${_scores["Cha"]}", textAlign: TextAlign.center,),
+                    trailing: new IconButton(icon: Icon(Icons.arrow_downward), onPressed: () { _moveElementDown(5); },),
                   ),
                 ],
               ),
