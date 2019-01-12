@@ -4,15 +4,12 @@ import 'dart:async';
 // Packages
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
 // User defined classes
 import 'charecter.dart';
 import 'charecterStorage.dart';
-import 'components/InputTextField.dart';
-import 'components/DropDownField.dart';
 import 'components/CharacterListItem.dart';
-import 'components/ToonCreator.dart';
+import 'package:Starbuilder/views/characterCreator/ToonCreator.dart';
 
 /*
   Main function.
@@ -74,11 +71,11 @@ class StarfinderState extends State<Starfinder> {
         toonList = value;
       });
     });
-    // widget.storage.readCharecter().then((Charecter value){
-    //   setState(() {
-    //     toon = value;
-    //   });
-    // });
+//     widget.storage.readCharecter().then((Charecter value){
+//       setState(() {
+//         toon = value;
+//       });
+//     });
   }
 
   List<Widget> createToonList(List<Charecter> toons)
@@ -140,7 +137,7 @@ class StarfinderState extends State<Starfinder> {
         // Appbar
           appBar: new AppBar(
             // Title
-            title: new Text("Charecter Creator"),
+            title: new Text("Character Creator"),
           ),
           body: new ToonCreation(),
         );
@@ -149,4 +146,3 @@ class StarfinderState extends State<Starfinder> {
     // return new ToonCreation();  
   }
 }
-

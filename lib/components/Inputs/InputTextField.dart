@@ -10,14 +10,18 @@ class InputTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new ListTile(
-      leading: Icon(this.iconType),
-      title: TextField(
+      title: TextFormField(
         decoration: new InputDecoration(
-          labelText: this.labelText,
+          //hintText: this.labelText,
+          labelText: "${this.labelText}:",
           fillColor: this.fillColor,
-          border: new OutlineInputBorder(
-            borderRadius: new BorderRadius.circular(25.0),
+          border: new UnderlineInputBorder(
+            borderRadius: new BorderRadius.horizontal(),
+            borderSide: new BorderSide(color: Colors.cyanAccent, width: 1.0, style: BorderStyle.solid),
           ),
+//          border: new OutlineInputBorder(
+//            borderRadius: new BorderRadius.circular(25.0),
+//          ),
         ),
         keyboardType: TextInputType.text,
         style: new TextStyle(
