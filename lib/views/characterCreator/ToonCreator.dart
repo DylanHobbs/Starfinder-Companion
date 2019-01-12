@@ -1,9 +1,12 @@
+import 'package:Starbuilder/models/toon.dart';
 import 'package:flutter/material.dart';
 import 'package:Starbuilder/views/characterCreator/steps/characterOverview.dart';
 import 'package:Starbuilder/views/characterCreator/steps/statsAllocator.dart';
 
 class ToonCreationState extends State<ToonCreation> {
   int currentStep = 0;
+  GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+  static Character myToon;
 
   List<Step> steps = [
     new Step(
@@ -34,6 +37,7 @@ class ToonCreationState extends State<ToonCreation> {
         ),
         body: Container(
           child: new Form(
+            key: _formKey,
             child: new Stepper(
               currentStep: this.currentStep,
               // List the steps you would like to have
@@ -88,10 +92,12 @@ class ToonCreationState extends State<ToonCreation> {
                     RaisedButton(
                       onPressed: onStepCancel,
                       child: const Text("Back"),
+                      shape: StadiumBorder(),
                     ),
                     RaisedButton(
                       onPressed: onStepContinue,
                       child: const Text("Next"),
+                      shape: StadiumBorder(),
                     ),
                   ],
                 );

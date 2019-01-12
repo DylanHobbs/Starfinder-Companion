@@ -47,17 +47,6 @@ class ToonListState extends State<ToonList> {
         itemCount: snapshot.data.length,
 
         itemBuilder: (BuildContext context, int index) {
-          // This is a real hackey way to add something to 
-          // the builder. Don't judge me too harshly.
-          // if(index == 0){
-          //   return DrawerHeader(
-          //     child: Text("Your Characters"),
-          //     decoration: BoxDecoration(
-          //       color: Colors.cyan[200],
-          //     ),
-          //   );
-          // }
-          // index--;
           Character item = snapshot.data[index];
           return Dismissible(
                     child: CharacterListItem(item.name, item.level, item.klass), 
