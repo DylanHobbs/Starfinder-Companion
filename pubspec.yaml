@@ -8,6 +8,8 @@ environment:
 
 dependencies:
   path_provider: ^0.4.1
+  sqflite: any
+  provider: any
   flutter:
     sdk: flutter
 

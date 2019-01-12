@@ -1,15 +1,12 @@
-// Base dart shtuff
-import 'dart:async';
-
 // Packages
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 // User defined classes
-import 'charecter.dart';
-import 'charecterStorage.dart';
-import 'components/CharacterListItem.dart';
 import 'package:Starbuilder/views/characterCreator/ToonCreator.dart';
+import 'package:Starbuilder/database/CharacterBloc.dart';
+import 'package:Starbuilder/models/toon.dart';
+import 'package:Starbuilder/views/characterListView/characterListView.dart';
 
 /*
   Main function.
@@ -18,131 +15,77 @@ import 'package:Starbuilder/views/characterCreator/ToonCreator.dart';
 */
 void main() {
   runApp(new MaterialApp(
-    title: "Statfinder Companion",
-    theme: ThemeData(
-        // Define the default Brightness and Colors
+      title: "Statfinder Companion",
+      theme: ThemeData(
         brightness: Brightness.dark,
         primaryColor: Colors.cyan[200],
         accentColor: Colors.cyan[600],
-
-        // Define the default Font Family
         fontFamily: 'Montserrat',
-
-        // Define the default TextTheme. Use this to specify the default
-        // text styling for headlines, titles, bodies of text, and more.
         textTheme: TextTheme(
           headline: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
           title: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
           body1: TextStyle(fontSize: 20.0, fontFamily: 'Hind'),
         ),
       ),
-    home: Scaffold(
-        appBar: AppBar(
-          title: Text('Starfinder Companion'),
-        ),
-        body: Center(
-          child: Starfinder(storage: CharecterStorage()),
-        )
-    )
-  ));
+      home: HomePage()));
 }
 
-class Starfinder extends StatefulWidget {
-  final CharecterStorage storage;
-  Starfinder({Key key, @required this.storage}) : super(key: key);
-
+class HomePage extends StatefulWidget {
   @override
-  StarfinderState createState() => new StarfinderState();
+  HomePageState createState() {
+    return new HomePageState();
+  }
 }
 
-class StarfinderState extends State<Starfinder> {
-  List data;
-  Charecter toon;
-  List<Charecter> toonList;
-  final _formKey = GlobalKey<FormState>();
-
-
+class HomePageState extends State<HomePage> {
+  final bloc = CharacterBloc();
 
   @override
-  void initState() {
-    super.initState();
-    widget.storage.readAllCharecters().then((List<Charecter> value){
-      setState(() {
-        toonList = value;
-      });
-    });
-//     widget.storage.readCharecter().then((Charecter value){
-//       setState(() {
-//         toon = value;
-//       });
-//     });
-  }
-
-  List<Widget> createToonList(List<Charecter> toons)
-  {
-    List<Widget> toReturn = new List<Widget>();
-    for (Charecter item in toons) {
-      toReturn.add(CharacterListItem(
-        item.info.name, 
-        item.info.level, 
-        item.info.klass)
-      );
-    }
-    toReturn.add(RaisedButton(
-      child: Icon(Icons.add_circle),
-      onPressed: _AddCharecter,
-      color: Colors.green[400],
-      splashColor: Colors.cyan[200],
-    ));
-    return toReturn;
-  }
-
-  Widget listAllToons() {
-    return new FutureBuilder<List<Charecter>>(
-      future: widget.storage.readAllCharecters(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return new ListView(
-            padding: new EdgeInsets.all(7.0),
-            children: createToonList(toonList),
-          );
-        } else if (snapshot.hasError) {
-          return new Text("${snapshot.error}");
-        }
-        return new CircularProgressIndicator();
-      },
-    );
+  void dispose() {
+    bloc.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Material(
-    child: new Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children:<Widget>[
-          Flexible(
-            child: listAllToons(),
-          )
-        ]
-    )
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Starfinder Companion'),
+      ),
+      drawer: Drawer(child: ToonList()),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => ToonCreation()));
+        },
+        child: Icon(Icons.add),
+      ),
+      body: new Material(
+          child: Center(
+        child: new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Flexible(
+                child: Text("Welcome to Starbuilder!"),
+              ),
+              Padding(
+                padding: EdgeInsets.all(20.0),
+                child: RaisedButton(
+                    onPressed: () {
+                      var rng = new Random();
+                      Character rnd = Character.fromJson({
+                        "id": rng.nextInt(150),
+                        "name": "Test",
+                        "klass": "Boomer",
+                        "level": 5,
+                        "race": "Baller"
+                      });
+                      bloc.add(rnd);
+                    },
+                    child: new Text("Add a Test Character!")),
+              )
+            ]),
+      )),
     );
-  }  
-
-  Widget _AddCharecter() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return new Scaffold(
-        // Appbar
-          appBar: new AppBar(
-            // Title
-            title: new Text("Character Creator"),
-          ),
-          body: new ToonCreation(),
-        );
-      }
-    );
-    // return new ToonCreation();  
   }
 }
