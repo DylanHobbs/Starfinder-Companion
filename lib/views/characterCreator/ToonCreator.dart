@@ -52,6 +52,10 @@ class ToonCreationState extends State<ToonCreation> {
                 });
               },
               onStepCancel: () {
+                // Check if the cancel button is hit on step 1
+                if(currentStep == 0){
+                  Navigator.pop(context);
+                }
                 // On hitting cancel button, change the state
                 setState(() {
                   // update the variable handling the current step value
@@ -101,7 +105,6 @@ class ToonCreationState extends State<ToonCreation> {
 class ToonCreation extends StatefulWidget {
   @override
   ToonCreationState createState() {
-    // TODO: Possible to pass CharecterStorageHere to allow saving save?
     return ToonCreationState();
   }
 }
