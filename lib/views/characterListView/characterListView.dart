@@ -7,7 +7,6 @@ import 'package:Starbuilder/components/CharacterListItem.dart';
 import 'package:Starbuilder/components/StarLoader.dart';
 
 class ToonList extends StatefulWidget {
-  
   @override
   ToonListState createState() {
     return new ToonListState();
@@ -18,7 +17,7 @@ class ToonListState extends State<ToonList> {
   final bloc = CharacterBloc();
 
   @override
-  void dispose(){
+  void dispose() {
     bloc.dispose();
     super.dispose();
   }
@@ -45,17 +44,55 @@ class ToonListState extends State<ToonList> {
     // Create the list
     return ListView.builder(
         itemCount: snapshot.data.length,
-
         itemBuilder: (BuildContext context, int index) {
           Character item = snapshot.data[index];
           return Dismissible(
-                    child: CharacterListItem(item.name, item.level, item.klass), 
-                    key: UniqueKey(),
-                    background: Container(color: Colors.red),
-                    onDismissed: (direction) {
-                      bloc.delete(item.id);
-                    },
-                  ); 
+            child: CharacterListItem(item.name, item.level, item.klass),
+            key: UniqueKey(),
+            background: Container(color: Colors.red),
+            onDismissed: (direction) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  // return object of type Dialog
+                  return AlertDialog(
+                    title: new Text("Confirm Delete"),
+                    content: new Text("Are you sure you want to perma-kill this dood?"),
+                    actions: <Widget>[
+                      ButtonBar(
+                        // mainAxisSize: MainAxisSize.max,
+                        alignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          new RaisedButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                        color: Colors.green,
+                        child: new Text("Revive!"),
+                        onPressed: () {
+                          // Animatied "phew" coming out of button
+                          bloc.getToons();
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      new RaisedButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(32.0))),
+                        color: Colors.red,
+                        child: new Text("Murder!"),
+                        onPressed: () {
+                          bloc.delete(item.id);
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                        ],
+                      )
+                    ],
+                  );
+                },
+              );
+          
+            },
+          );
         });
   }
 }

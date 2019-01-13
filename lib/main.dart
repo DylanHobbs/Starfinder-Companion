@@ -50,7 +50,7 @@ class _StarbuilderState extends State<Starbuilder> {
       initialData: this.initalTheme.data,
       builder: (BuildContext context, AsyncSnapshot<ThemeData> snapshot){
         return MaterialApp(
-          title: "Boomfa Rugby",
+          title: "Starbuilder",
           theme: snapshot.data,
           home: HomePage(
             themeBloc: _themeBloc,
