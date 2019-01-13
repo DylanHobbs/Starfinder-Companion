@@ -6,6 +6,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:Starbuilder/models/toon.dart';
 
 class DBProvider {
+  String tableName = "TestToons";
   DBProvider._();
   static final DBProvider db = DBProvider._();
 
@@ -22,26 +23,26 @@ class DBProvider {
 
   Future<int> newToon(Character newToon) async {
     final db = await database;
-    var res = await db.insert("TestToons", newToon.toJson());
+    var res = await db.insert(tableName, newToon.toJson());
     return res;
   }
 
   Future<Character> getToon(int id) async {
     final db = await database;
-    var res =await  db.query("TestToons", where: "id = ?", whereArgs: [id]);
+    var res =await  db.query(tableName, where: "id = ?", whereArgs: [id]);
     return res.isNotEmpty ? Character.fromJson(res.first) : Null ;
   }
 
   Future<Character> getToonFromName(String name) async {
     final db = await database;
-    var res =await  db.query("TestToons", where: "name = ?", whereArgs: [name]);
+    var res =await  db.query(tableName, where: "name = ?", whereArgs: [name]);
     return res.isNotEmpty ? Character.fromJson(res.first) : Null ;
   }
 
 
   Future<List<Character>>getAllToons() async {
       final db = await database;
-      var res = await db.query("TestToons");
+      var res = await db.query(tableName);
       List<Character> list =
           res.isNotEmpty ? res.map((c) => Character.fromJson(c)).toList() : [];
       return list;
@@ -49,14 +50,14 @@ class DBProvider {
 
   Future<int> updateToon(Character newToon) async {
     final db = await database;
-    var res = await db.update("TestToons", newToon.toJson(),
+    var res = await db.update(tableName, newToon.toJson(),
         where: "id = ?", whereArgs: [newToon.id]);
     return res;
   }
 
   void deleteToon(int id) async {
     final db = await database;
-    db.delete("TestToons", where: "id = ?", whereArgs: [id]);
+    db.delete(tableName, where: "id = ?", whereArgs: [id]);
   }
 
   initDB() async {
@@ -64,7 +65,7 @@ class DBProvider {
     String path = join(documentsDirectory.path, "TestDB.db");
     return await openDatabase(path, version: 1, onOpen: (db) {
     }, onCreate: (Database db, int version) async {
-      await db.execute("CREATE TABLE TestToons ("
+      await db.execute("CREATE TABLE ${tableName} ("
           "id INTEGER PRIMARY KEY,"
           "name TEXT,"
           "race TEXT,"
