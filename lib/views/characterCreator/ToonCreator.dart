@@ -82,6 +82,7 @@ class ToonCreationState extends State<ToonCreation> {
                   setState(() {
                     // update the variable handling the current step value
                     // jump to the tapped step
+                    _formKey.currentState.save();
                     currentStep = step;
                   });
                 },
