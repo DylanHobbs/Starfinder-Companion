@@ -54,6 +54,7 @@ class ThemeDir {
           primaryColor: Pigment.fromString("#222C58"),
           accentColor: Pigment.fromString("#FADF50"),
           buttonColor: Pigment.fromString("#CF0A2C"),
+          cardColor: Pigment.fromString("#CF0A2C"),
           fontFamily: 'Montserrat',
           textTheme: TextTheme(
             headline: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
@@ -148,26 +149,27 @@ class ThemeDir {
           ),
         )),
     StarbuilderTheme(
-        'Dylan',
-        ThemeData(
-          brightness: Brightness.light,
-          primaryColor: Pigment.fromString("#5C89B4"),
-          accentColor: Pigment.fromString("#A2CFE7"),
-          scaffoldBackgroundColor: Pigment.fromString("#DDD5D0"),
-          canvasColor: Pigment.fromString("#DDD5D0"),
-          cardColor: Pigment.fromString("#A2CFE7"),
-          buttonTheme: ButtonThemeData(
-              buttonColor: Pigment.fromString("#231B28"),
-              textTheme: ButtonTextTheme.primary,
-              splashColor: Pigment.fromString("#DDD5D0"),
-              shape: StadiumBorder()),
-          fontFamily: 'Montserrat',
-          textTheme: TextTheme(
-            headline: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-            title: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-            body1: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
-          ),
-        ))
+      'Dylan',
+      ThemeData(
+        brightness: Brightness.light,
+        primaryColor: Pigment.fromString("#5C89B4"),
+        accentColor: Pigment.fromString("#A2CFE7"),
+        scaffoldBackgroundColor: Pigment.fromString("#DDD5D0"),
+        canvasColor: Pigment.fromString("#DDD5D0"),
+        cardColor: Pigment.fromString("#A2CFE7"),
+        buttonTheme: ButtonThemeData(
+            buttonColor: Pigment.fromString("#231B28"),
+            textTheme: ButtonTextTheme.primary,
+            splashColor: Pigment.fromString("#DDD5D0"),
+            shape: StadiumBorder()),
+        fontFamily: 'Montserrat',
+        textTheme: TextTheme(
+          headline: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+          title: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+          body1: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+        ),
+      )
+    ),
   ];
 
   StarbuilderTheme getThemeByName(String name) {
@@ -218,8 +220,8 @@ class ThemeList extends StatelessWidget {
                 decoration: new BoxDecoration(
                     border: new Border(
                         right:
-                            new BorderSide(width: 1.0, color: Colors.white24))),
-                child: Icon(Icons.format_paint, color: Colors.white),
+                            new BorderSide(width: 1.0, color: Theme.of(context).accentColor))),
+                child: Icon(Icons.format_paint, color: Theme.of(context).accentColor),
               ),
               title: Text(
                 current.name,
