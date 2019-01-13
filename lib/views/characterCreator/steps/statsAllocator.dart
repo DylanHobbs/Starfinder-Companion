@@ -68,6 +68,7 @@ class _CharacterStatsState extends State<CharacterStats> {
                     value: 0,
                     groupValue: _allocationType,
                     onChanged: _handleViewChange,
+                    activeColor: Theme.of(context).accentColor,
                   ),
                   Text(
                     "Custom",
@@ -81,6 +82,7 @@ class _CharacterStatsState extends State<CharacterStats> {
                     value: 1,
                     groupValue: _allocationType,
                     onChanged: _handleViewChange,
+                    activeColor: Theme.of(context).accentColor,
                   ),
                   Text(
                     "Point Buy",
@@ -94,6 +96,7 @@ class _CharacterStatsState extends State<CharacterStats> {
                     value: 2,
                     groupValue: _allocationType,
                     onChanged: _handleViewChange,
+                    activeColor: Theme.of(context).accentColor,
                   ),
                   Text(
                     "Roll",

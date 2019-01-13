@@ -24,7 +24,7 @@ class InputNumberField extends StatelessWidget {
           border: new UnderlineInputBorder(
             borderRadius: new BorderRadius.horizontal(),
             borderSide: new BorderSide(
-                color: Colors.cyanAccent,
+                color: Theme.of(context).accentColor,
                 width: 1.0,
                 style: BorderStyle.solid
             ),

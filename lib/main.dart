@@ -1,6 +1,8 @@
 // Packages
+import 'package:Starbuilder/theme/theme_list.dart';
 import 'package:Starbuilder/theme/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // User defined classes
 import 'package:Starbuilder/views/home.dart';
@@ -23,8 +25,20 @@ class Starbuilder extends StatefulWidget {
 
 class _StarbuilderState extends State<Starbuilder> {
   ThemeBloc _themeBloc;
+  StarbuilderTheme initalTheme;
+
+  Future<Null> getSharedPrefs() async {
+    ThemeDir dir = ThemeDir();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      String theme = prefs.getString('theme') ?? "Default";
+      this.initalTheme = dir.getThemeByName(theme);
+    });
+  }
+  
   @override
-  void initState() { 
+  initState() { 
+    getSharedPrefs();
     super.initState();
     _themeBloc = ThemeBloc();
   }
@@ -33,7 +47,7 @@ class _StarbuilderState extends State<Starbuilder> {
   Widget build(BuildContext context) {
     return StreamBuilder<ThemeData>(
       stream: _themeBloc.themeDataStream,
-      initialData: _themeBloc.defaultTheme().data,
+      initialData: this.initalTheme.data,
       builder: (BuildContext context, AsyncSnapshot<ThemeData> snapshot){
         return MaterialApp(
           title: "Boomfa Rugby",

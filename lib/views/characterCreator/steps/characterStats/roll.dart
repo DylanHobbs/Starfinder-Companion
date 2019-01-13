@@ -122,6 +122,7 @@ class _RollState extends State<Roll> {
               new RaisedButton(
                 onPressed: _rollScores,
                 child: new Text("Roll!"),
+                shape: StadiumBorder()
               )
             ],
           ),

@@ -12,6 +12,7 @@ dependencies:
   provider: any
   pigment: any
   rxdart: any
+  shared_preferences: any
   flutter:
     sdk: flutter
 
