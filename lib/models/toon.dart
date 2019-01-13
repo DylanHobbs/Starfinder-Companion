@@ -44,4 +44,8 @@ class Character {
         "klass": klass,
         "level": level,
     };
+
+    String toString(){
+      return "Character: Name: {$this.name} || Class: {$this.klass} || Level: ${this.level}";
+    }
 }

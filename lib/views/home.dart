@@ -25,66 +25,60 @@ class HomePageState extends State<HomePage> {
   HomePageState(this.themeBloc);
 
   @override
-  void dispose() {
-    bloc.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Starfinder Companion'),
-        actions: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.settings,
+        appBar: AppBar(
+          title: Text('Starfinder Companion'),
+          actions: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.settings,
+                  ),
+                  tooltip: 'Theme selector',
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ThemeSelectorPage(
+                              themeBloc: this.themeBloc,
+                        )
+                    ));
+                  },
                 ),
-                tooltip: 'Theme selector',
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ThemeSelectorPage(
-                            themeBloc: this.themeBloc,
-                      )
-                  ));
-                },
-              ),
-            ],
-      ),
-      drawer: Drawer(child: ToonList()),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ToonCreation()));
-        },
-        child: Icon(Icons.add),
-      ),
-      body: new Material(
-          child: Center(
-        child: new Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Flexible(
-                child: Text("Welcome to Starbuilder!"),
-              ),
-              Padding(
-                padding: EdgeInsets.all(20.0),
-                child: RaisedButton(
-                    onPressed: () {
-                      var rng = new Random();
-                      Character rnd = Character.fromJson({
-                        "id": rng.nextInt(150),
-                        "name": "Test",
-                        "klass": "Boomer",
-                        "level": 5,
-                        "race": "Baller"
-                      });
-                      bloc.add(rnd);
-                    },
-                    child: new Text("Add a Test Character!")),
-              )
-            ]),
-      )),
+              ],
+        ),
+        drawer: Drawer(child: ToonList()),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => ToonCreation(bloc)));
+          },
+          child: Icon(Icons.add),
+        ),
+        body: new Material(
+            child: Center(
+          child: new Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Flexible(
+                  child: Text("Welcome to Starbuilder!"),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: RaisedButton(
+                      onPressed: () {
+                        var rng = new Random();
+                        Character rnd = Character.fromJson({
+                          "id": rng.nextInt(150),
+                          "name": "Test",
+                          "klass": "Boomer",
+                          "level": 5,
+                          "race": "Baller"
+                        });
+                        bloc.add(rnd);
+                      },
+                      child: new Text("Add a Test Character!")),
+                )
+              ]),
+        )),
     );
   }
 }
