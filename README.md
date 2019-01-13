@@ -1,16 +1,10 @@
-# hello_world
+# Starbuilder
 
-A new Flutter project.
+A character store and creation tool for Starfinder. Currently under development.
 
-## Getting Started
+## Feautures
+Character Storage
 
-This project is a starting point for a Flutter application.
+Character Creator Helper
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+Backup and restore to multiple devices 
