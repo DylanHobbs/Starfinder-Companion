@@ -24,15 +24,9 @@ class FormData extends InheritedWidget {
 }
 
 class ToonCreationState extends State<ToonCreation> {
+  Character data = Character.fromJson({"id":-1,"name":"","speed":30,"race":"","theme":"","klass":"","level":1,"xp":0,"description":"","languages":"","allignment":"","diety":false,"money":10,"current_hp":10,"EAC":10,"KAC":10,"keyAbility":"","carrying_cap":100,"Acrobatics":1,"Athletics":1,"Bluff":1,"Computers":1,"Culture":1,"Diplomacy":1,"Disguise":1,"Engineering":1,"Intimidate":1,"Life_Science":1,"Medicine":1,"Mysticism":1,"Perception":1,"Physical_Science":1,"Piloting":1,"Profession":1,"Sense_Motive":1,"Sleight_of_Hand":1,"Stealth":1,"Survival":1,"Strength":10,"Dexterity":10,"Constitution":10,"Intelligence":10,"Wisdom":10,"Charisma":10});
   int currentStep = 0;
   GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-  Character data = Character.fromJson({
-                        "id": -1,
-                        "name": "",
-                        "klass": "",
-                        "level": 1,
-                        "race": ""
-                      });
   CharacterBloc bloc;
   ToonCreationState(this.bloc);
 
