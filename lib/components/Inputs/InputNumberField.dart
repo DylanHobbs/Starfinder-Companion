@@ -4,11 +4,16 @@ class InputNumberField extends StatelessWidget {
   IconData iconType;
   String labelText;
   Color fillColor;
+  Function onsaved;
+  var initalValue;
+
 
   InputNumberField(
     this.iconType,
     this.labelText,
-    this.fillColor
+    this.fillColor,
+    this.onsaved,
+    this.initalValue
   );
 
   @override
@@ -16,6 +21,8 @@ class InputNumberField extends StatelessWidget {
     return new ListTile(
       dense: true,
       title: TextFormField(
+        initialValue: initalValue.toString(),
+        onSaved: onsaved,
         decoration: new InputDecoration(
           //hintText: this.labelText,
           labelText: "${this.labelText}:",
@@ -24,7 +31,7 @@ class InputNumberField extends StatelessWidget {
           border: new UnderlineInputBorder(
             borderRadius: new BorderRadius.horizontal(),
             borderSide: new BorderSide(
-                color: Colors.cyanAccent,
+                color: Theme.of(context).accentColor,
                 width: 1.0,
                 style: BorderStyle.solid
             ),

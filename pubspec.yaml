@@ -8,6 +8,11 @@ environment:
 
 dependencies:
   path_provider: ^0.4.1
+  sqflite: any
+  provider: any
+  pigment: any
+  rxdart: any
+  shared_preferences: any
   flutter:
     sdk: flutter
 

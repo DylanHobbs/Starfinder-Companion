@@ -4,27 +4,37 @@ import 'package:Starbuilder/views/characterCreator/steps/characterStats/pointBuy
 import 'package:Starbuilder/views/characterCreator/steps/characterStats/roll.dart';
 
 class CharacterStats extends StatefulWidget {
+  GlobalKey<FormState> myKey;
 
+  CharacterStats(this.myKey);
   @override
   State<StatefulWidget> createState() {
-    return new _CharacterStatsState();
+    return new _CharacterStatsState(myKey);
   }
 }
 
 class _CharacterStatsState extends State<CharacterStats> {
-  static Widget _custom = new Custom();
+  GlobalKey<FormState> myKey;
+
+  _CharacterStatsState(this.myKey);
   int _allocationType = 0;
-  Widget _view = new Container(
-    padding: EdgeInsets.all(20),
-    child: _custom,
-  );
+  Widget _view;
+  
+  void initState() { 
+    super.initState();
+    Widget _custom = Custom(myKey);
+    _view = new Container(
+      padding: EdgeInsets.all(20),
+      child: _custom,
+    );
+  }
 
   void _handleViewChange(int value) {
     setState(() {
       _allocationType = value;
       switch(value) {
         case 0: {
-          _view = new Custom();
+          _view = new Custom(myKey);
         } break;
 
         case 1: {
@@ -68,6 +78,7 @@ class _CharacterStatsState extends State<CharacterStats> {
                     value: 0,
                     groupValue: _allocationType,
                     onChanged: _handleViewChange,
+                    activeColor: Theme.of(context).accentColor,
                   ),
                   Text(
                     "Custom",
@@ -81,6 +92,7 @@ class _CharacterStatsState extends State<CharacterStats> {
                     value: 1,
                     groupValue: _allocationType,
                     onChanged: _handleViewChange,
+                    activeColor: Theme.of(context).accentColor,
                   ),
                   Text(
                     "Point Buy",
@@ -94,6 +106,7 @@ class _CharacterStatsState extends State<CharacterStats> {
                     value: 2,
                     groupValue: _allocationType,
                     onChanged: _handleViewChange,
+                    activeColor: Theme.of(context).accentColor,
                   ),
                   Text(
                     "Roll",
