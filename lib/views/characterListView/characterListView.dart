@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:Starbuilder/views/characterView/basicView.dart';
 import 'package:flutter/material.dart';
 import 'package:Starbuilder/models/toon.dart';
 import 'package:Starbuilder/database/CharacterBloc.dart';
@@ -47,7 +48,13 @@ class ToonListState extends State<ToonList> {
         itemBuilder: (BuildContext context, int index) {
           Character item = snapshot.data[index];
           return Dismissible(
-            child: CharacterListItem(item.name, item.level, item.klass),
+            child: CharacterListItem(item.name, item.level, item.klass, (){
+              Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => BasicView(
+                              name: item.name,
+                        )
+                    ));
+            }),
             key: UniqueKey(),
             background: Container(color: Colors.red),
             onDismissed: (direction) {
