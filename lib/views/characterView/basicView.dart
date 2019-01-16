@@ -51,70 +51,64 @@ class _BasicViewState extends State<BasicView> {
       appBar: AppBar(
         title: Text(toon.name + " the " + toon.klass),
       ),
-          body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-        Container(
-            padding: const EdgeInsets.all(30),
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              gradient: new LinearGradient(
-                colors: [Theme.of(context).cardColor, Theme.of(context).canvasColor],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight
-              )
-            ),
-                child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          "Name",
-                          style: TextStyle(color: Colors.grey[500]),
-                        ),
-                        Container(
-                          child: Text(
-                            toon.name,
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Icon(
-                    Icons.stars,
-                  ),
-                  Text(toon.level.toString())
-                ],
-              ),
-            ),
-        Container(
-          decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              gradient: new LinearGradient(
-                colors: [Theme.of(context).cardColor, Theme.of(context).canvasColor],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight
-              )
-            ),
-                  child: Padding(
-            padding: const EdgeInsets.only(top: 30, bottom: 30),
+      body:
+          Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
+        Padding(
+          padding:
+              const EdgeInsets.only(left: 8.0, right: 8, top: 15, bottom: 15),
+          child: Container(
+            padding: const EdgeInsets.all(25),
+            decoration: characterBoxDecoration(),
             child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              _buildStatColumn(toon.strength.toString(), "Str"),
-              _buildStatColumn(toon.wisdom.toString(), "Wis"),
-              _buildStatColumn(toon.wisdom.toString(), "Con"),
-              _buildStatColumn(toon.intelligence.toString(), "Int"),
-              _buildStatColumn(toon.dexterity.toString(), "Dex"),
-              _buildStatColumn(toon.charisma.toString(), "Cha"),
-            ],
-          )
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "Name",
+                        style: TextStyle(color: Colors.grey[500]),
+                      ),
+                      Container(
+                        child: Text(
+                          toon.name,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 30),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.stars,
+                ),
+                Text(
+                  toon.level.toString(),
+                  style: TextStyle(fontSize: 20),
+                )
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 8, right: 8, bottom: 15),
+          child: Container(
+            decoration: characterBoxDecoration(),
+            child: Padding(
+                padding: const EdgeInsets.only(top: 30, bottom: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    _buildStatColumn(toon.strength.toString(), "Str"),
+                    _buildStatColumn(toon.wisdom.toString(), "Wis"),
+                    _buildStatColumn(toon.wisdom.toString(), "Con"),
+                    _buildStatColumn(toon.intelligence.toString(), "Int"),
+                    _buildStatColumn(toon.dexterity.toString(), "Dex"),
+                    _buildStatColumn(toon.charisma.toString(), "Cha"),
+                  ],
+                )),
           ),
         )
-        
       ]),
     );
   }
@@ -129,7 +123,6 @@ class _BasicViewState extends State<BasicView> {
           style: TextStyle(
             fontSize: 17.0,
             fontWeight: FontWeight.bold,
-            color: Theme.of(context).accentColor,
           ),
         ),
         Container(
@@ -139,11 +132,29 @@ class _BasicViewState extends State<BasicView> {
             style: TextStyle(
               fontSize: 12.0,
               fontWeight: FontWeight.w400,
-              color: Theme.of(context).accentColor,
             ),
           ),
         ),
       ],
+    );
+  }
+
+  characterBoxDecoration() {
+    return BoxDecoration(
+        boxShadow: const [BoxShadow(blurRadius: 15)],
+        borderRadius: BorderRadius.all(Radius.circular(35)),
+        gradient: new LinearGradient(colors: [
+          Theme.of(context).cardColor,
+          Theme.of(context).primaryColor
+        ], begin: Alignment.centerLeft, end: Alignment.centerRight));
+  }
+
+  Widget LittleBox({child: const Text("Empty")}){
+    return Container(
+      child: child,
+      decoration: BoxDecoration(
+        border: Border.all(),
+      ),
     );
   }
 }
