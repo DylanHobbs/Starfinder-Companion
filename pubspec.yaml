@@ -12,6 +12,7 @@ dependencies:
   provider: any
   pigment: any
   rxdart: any
+  font_awesome_flutter: 8.2.0
   shared_preferences: any
   flutter:
     sdk: flutter
