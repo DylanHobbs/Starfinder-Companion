@@ -3,6 +3,7 @@ import 'package:Starbuilder/components/StarLoader.dart';
 import 'package:Starbuilder/database/CharacterBloc.dart';
 import 'package:Starbuilder/models/toon.dart';
 import 'package:Starbuilder/theme/themes.dart';
+import 'package:Starbuilder/views/characterCreator/ToonCreator.dart';
 import 'package:Starbuilder/views/characterListView/characterListView.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -72,6 +73,13 @@ class _BasicViewState extends State<BasicView> {
       }
     }
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => ToonCreation(bloc)));
+          },
+          child: Icon(Icons.add),
+        ),
         drawer: Drawer(child: ToonList(themeBloc: this.themeBloc), elevation: 20,),
         bottomNavigationBar: _buildBottomNavBar(),
         body: CustomScrollView(
