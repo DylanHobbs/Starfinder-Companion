@@ -1,3 +1,4 @@
+import 'package:Starbuilder/components/AnimatedHealthBar.dart';
 import 'package:Starbuilder/components/CurveClipper.dart';
 import 'package:Starbuilder/components/StarLoader.dart';
 import 'package:Starbuilder/database/CharacterBloc.dart';
@@ -250,7 +251,8 @@ class _BasicViewState extends State<BasicView> {
   }
 
   _buildHPCircle() {
-    return Container(
+    return AnimatedContainer(
+      duration: Duration(seconds: 2),
       child: Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -262,6 +264,7 @@ class _BasicViewState extends State<BasicView> {
       width: 100,
       height: 100,
       decoration: BoxDecoration(
+          color: Colors.red,
           border: Border.all(color: Theme.of(context).accentColor, width: 2.0),
           shape: BoxShape.circle),
     );
@@ -300,7 +303,7 @@ class _BasicViewState extends State<BasicView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               _buildLittleCircle("KAC", 20, toon.kac),
-              _buildHPCircle(),
+              AnimatedHealthBar(Theme.of(context).cardColor),
               _buildLittleCircle("EAC", 20, toon.eac),
             ],
           ),
