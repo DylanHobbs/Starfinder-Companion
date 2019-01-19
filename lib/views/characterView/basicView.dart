@@ -2,30 +2,42 @@ import 'package:Starbuilder/components/CurveClipper.dart';
 import 'package:Starbuilder/components/StarLoader.dart';
 import 'package:Starbuilder/database/CharacterBloc.dart';
 import 'package:Starbuilder/models/toon.dart';
-import 'package:Starbuilder/theme/theme_selector.dart';
+import 'package:Starbuilder/theme/themes.dart';
 import 'package:Starbuilder/views/characterListView/characterListView.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BasicView extends StatefulWidget {
-  String name;
-  BasicView({Key key, this.name}) : super(key: key);
+  final String name;
+  final ThemeBloc themeBloc;
+  BasicView({Key key, this.name, this.themeBloc}) : super(key: key);
   @override
-  _BasicViewState createState() => _BasicViewState(name);
+  _BasicViewState createState() => _BasicViewState(name, themeBloc);
 }
 
 class _BasicViewState extends State<BasicView> {
   final bloc = CharacterBloc();
+  final themeBloc;
   Character toon;
   String name;
   double _imageHeight = 250.0;
-  _BasicViewState(this.name);
+  double _appBarHeight = 50.0;
+  double cardSize = 280.0;
   int currentIndex = 0;
+  ScrollController _controller;
+
+  _BasicViewState(this.name, this.themeBloc);
 
   @override
   void dispose() {
     bloc.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    _controller = ScrollController();
+    super.initState();
   }
 
   @override
@@ -36,7 +48,7 @@ class _BasicViewState extends State<BasicView> {
         stream: bloc.toons,
         builder: (context, AsyncSnapshot<List<Character>> snapshot) {
           if (snapshot.hasData) {
-            return showToon(snapshot);
+            return showToon(snapshot, this.themeBloc);
           } else if (snapshot.hasError) {
             return Text(snapshot.error.toString());
           }
@@ -46,13 +58,68 @@ class _BasicViewState extends State<BasicView> {
     );
   }
 
-  Widget _buildEmptyCard() {
+    /*
+    Main Container
+    Responsible for selecting charecter and bringing components together
+    Including all animation
+  */
+  Widget showToon(AsyncSnapshot<List<Character>> snapshot, themeBloc) {
+    ThemeBloc _themeBloc = themeBloc; 
+    List<Character> toons = snapshot.data;
+    for (var toon in toons) {
+      if (toon.name == name) {
+        this.toon = toon;
+      }
+    }
+    return Scaffold(
+        drawer: Drawer(child: ToonList(themeBloc: this.themeBloc), elevation: 20,),
+        bottomNavigationBar: _buildBottomNavBar(),
+        body: CustomScrollView(
+          controller: _controller,
+          slivers: <Widget>[
+            SliverAppBar(
+              brightness: Theme.of(context).brightness,
+              forceElevated: true,
+              backgroundColor: Colors.transparent,
+              centerTitle: true,
+              elevation: 0.0,
+              title: Text('${toon.name} | Level ${toon.level} | ${toon.klass}',
+                  style: TextStyle(color: Colors.white)),
+              iconTheme: IconThemeData(color: Colors.white),
+              expandedHeight: _imageHeight + _appBarHeight,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Stack(
+                  children: <Widget>[
+                    _buildMainRect(),
+                    _buildBasicInfoScreen(),
+                  ],
+                ),
+              ),
+            ),
+            SliverFixedExtentList(
+              itemExtent: cardSize,
+              delegate: SliverChildListDelegate(
+                [
+                  _buildEmptyCard("Information Card"),
+                  _buildEmptyCard("Spells Card"),
+                  _buildEmptyCard("Combat Card"),
+                  _buildEmptyCard("Roleplay Card"),
+                ],
+              ),
+            ),
+          ],
+        ));
+  }
+
+  Widget _buildEmptyCard(String text) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Container(
-        height: 120,
+        width: 200,
+        height: 100,
         child: Card(
-          child: Center(child: Text("This is a test card")),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+          child: Center(child: Text(text, style: TextStyle(fontSize: 30, color: Theme.of(context).accentColor),)),
         ),
       ),
     );
@@ -101,9 +168,14 @@ class _BasicViewState extends State<BasicView> {
 
   _buildBottomNavBar() {
     return BottomNavigationBar(
-      currentIndex: currentIndex, // this will be set when a new tab is tapped
-      type: BottomNavigationBarType.shifting,
-      fixedColor: Theme.of(context).cardColor,
+      currentIndex: currentIndex, 
+      /*
+        The navbar type of shifting is actually better
+        but it doesn't seem to allow any colour change. 
+      */
+      // type: BottomNavigationBarType.shifting,
+      type: BottomNavigationBarType.fixed,
+      fixedColor: Theme.of(context).accentColor,
       onTap: _onItemTapped,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
@@ -127,13 +199,22 @@ class _BasicViewState extends State<BasicView> {
     setState(() {
       currentIndex = index;
     });
+    /*
+      Scrolling is managed here. When we use different card sizes for each card
+      we'll need some logic based on the index here. For now it's just fixed
+    */
+    _controller.animateTo((index) * cardSize * 1.5,
+        duration: new Duration(seconds: 1), curve: Curves.ease);
   }
 
+  /*
+    Responsible for building the curved container
+  */
   _buildMainRect() {
     return ClipPath(
       clipper: CurveClipper(),
       child: new Container(
-        height: _imageHeight,
+        height: _imageHeight + _appBarHeight,
         decoration: BoxDecoration(
           boxShadow: const [BoxShadow(blurRadius: 25)],
           color: Theme.of(context).cardColor,
@@ -142,229 +223,82 @@ class _BasicViewState extends State<BasicView> {
     );
   }
 
+  _buildLittleCircle(String label, double size, int value) {
+    return Container(
+      child: Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(value.toString(), style: TextStyle(fontSize: size)),
+          Text("KAC", style: TextStyle(fontSize: size / 3)),
+        ],
+      )),
+      width: 50,
+      height: 50,
+      decoration: BoxDecoration(
+          border: Border.all(color: Theme.of(context).accentColor, width: 2.0),
+          shape: BoxShape.circle),
+    );
+  }
+
+  _buildHPCircle() {
+    return Container(
+      child: Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text("50", style: TextStyle(fontSize: 35)),
+          Text("Current HP", style: TextStyle(fontSize: 12)),
+        ],
+      )),
+      width: 100,
+      height: 100,
+      decoration: BoxDecoration(
+          border: Border.all(color: Theme.of(context).accentColor, width: 2.0),
+          shape: BoxShape.circle),
+    );
+  }
+
+  _buildStatsBlock() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8, right: 8, bottom: 15),
+      child: Padding(
+          padding: const EdgeInsets.only(top: 30, bottom: 30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              _buildStatColumn(toon.strength.toString(), "Str"),
+              _buildStatColumn(toon.wisdom.toString(), "Wis"),
+              _buildStatColumn(toon.wisdom.toString(), "Con"),
+              _buildStatColumn(toon.intelligence.toString(), "Int"),
+              _buildStatColumn(toon.dexterity.toString(), "Dex"),
+              _buildStatColumn(toon.charisma.toString(), "Cha"),
+            ],
+          )),
+    );
+  }
+  /*
+    Contains the basic info that will scroll up.
+    TODO: Stop scroll before stats go off screen.
+    Info here: https://medium.com/flutter-io/slivers-demystified-6ff68ab0296f
+  */
   _buildBasicInfoScreen() {
     return new Padding(
-      padding: new EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+      padding: new EdgeInsets.only(
+          left: 30, right: 30, top: _appBarHeight + 30, bottom: 15),
       child: Column(
         children: <Widget>[
           new Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Container(
-                child: Center(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text("13", style: TextStyle(fontSize: 20)),
-                    Text("KAC", style: TextStyle(fontSize: 8)),
-                  ],
-                )),
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width: 2.0),
-                    shape: BoxShape.circle),
-              ),
-              Container(
-                child: Center(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text("50", style: TextStyle(fontSize: 35)),
-                    Text("Current HP", style: TextStyle(fontSize: 12)),
-                  ],
-                )),
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width: 2.0),
-                    shape: BoxShape.circle),
-              ),
-              Container(
-                child: Center(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text("17", style: TextStyle(fontSize: 20)),
-                    Text("EAC", style: TextStyle(fontSize: 8)),
-                  ],
-                )),
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width: 2.0),
-                    shape: BoxShape.circle),
-              )
+              _buildLittleCircle("KAC", 20, toon.kac),
+              _buildHPCircle(),
+              _buildLittleCircle("EAC", 20, toon.eac),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8, bottom: 15),
-            child: Padding(
-                padding: const EdgeInsets.only(top: 30, bottom: 30),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    _buildStatColumn(toon.strength.toString(), "Str"),
-                    _buildStatColumn(toon.wisdom.toString(), "Wis"),
-                    _buildStatColumn(toon.wisdom.toString(), "Con"),
-                    _buildStatColumn(toon.intelligence.toString(), "Int"),
-                    _buildStatColumn(toon.dexterity.toString(), "Dex"),
-                    _buildStatColumn(toon.charisma.toString(), "Cha"),
-                  ],
-                )),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildListBody() {
-    return new Expanded(
-    child: new ListView(
-      children: <Widget>[
-        _buildEmptyCard(),
-        _buildEmptyCard(),
-        _buildEmptyCard(),
-        _buildEmptyCard(),
-        _buildEmptyCard(),
-        _buildEmptyCard(),
-        _buildEmptyCard(),
-        _buildEmptyCard(),
-        _buildEmptyCard(),
-        _buildEmptyCard(),
-        _buildEmptyCard(),
-        _buildEmptyCard(),
-        _buildEmptyCard(),
-        _buildEmptyCard(),
-      ],
-    ),
-  );
-  }
-
-  Widget _buildMyTasksHeader() {
-  return Padding(
-    padding: const EdgeInsets.only(bottom: 8.0),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-              new Text(
-                'Character Stuff',
-                style: new TextStyle(fontSize: 34.0),
-              ),
-      ],
-    ),
-  );
-}
-
-Widget _buildBottomPart() {
-  return new Padding(
-    padding: new EdgeInsets.only(top: _imageHeight),
-    child: new Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        _buildMyTasksHeader(),
-        _buildListBody(),
-      ],
-    ),
-  );
-}
-
-  Widget showToon(AsyncSnapshot<List<Character>> snapshot) {
-    List<Character> toons = snapshot.data;
-    for (var toon in toons) {
-      if (toon.name == name) {
-        this.toon = toon;
-      }
-    }
-    return Scaffold(
-      drawer: Drawer(child: ToonList()),
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).cardColor,
-        elevation: 0.0,
-        centerTitle: true,
-        title: Text('${toon.name} | Level ${toon.level} | ${toon.klass}',
-            style: TextStyle(color: Colors.white)),
-        iconTheme: IconThemeData(color: Colors.white),
-      ),
-      bottomNavigationBar: _buildBottomNavBar(),
-      body: new Stack(
-        children: <Widget>[
-          _buildMainRect(),
-          _buildBasicInfoScreen(),
-          _buildBottomPart(),
+          _buildStatsBlock()
         ],
       ),
     );
   }
 }
-//   return Scaffold(
-//     body:
-//         Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-//       Padding(
-//         padding:
-//             const EdgeInsets.only(left: 8.0, right: 8, top: 15, bottom: 15),
-//         child: Container(
-//           padding: const EdgeInsets.all(25),
-//           decoration: characterBoxDecoration(),
-//           child: Row(
-//             children: <Widget>[
-//               Expanded(
-//                 child: Column(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: <Widget>[
-//                     Text(
-//                       "Name",
-//                       style: TextStyle(color: Colors.grey[500]),
-//                     ),
-//                     Container(
-//                       child: Text(
-//                         toon.name,
-//                         style: TextStyle(
-//                             fontWeight: FontWeight.bold, fontSize: 30),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//               Icon(
-//                 Icons.stars,
-//               ),
-//               Text(
-//                 toon.level.toString(),
-//                 style: TextStyle(fontSize: 20),
-//               )
-//             ],
-//           ),
-//         ),
-//       ),
-//       Padding(
-//         padding: const EdgeInsets.only(left: 8, right: 8, bottom: 15),
-//         child: Container(
-//           decoration: characterBoxDecoration(),
-//           child: Padding(
-//               padding: const EdgeInsets.only(top: 30, bottom: 30),
-//               child: Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                 children: <Widget>[
-//                   _buildStatColumn(toon.strength.toString(), "Str"),
-//                   _buildStatColumn(toon.wisdom.toString(), "Wis"),
-//                   _buildStatColumn(toon.wisdom.toString(), "Con"),
-//                   _buildStatColumn(toon.intelligence.toString(), "Int"),
-//                   _buildStatColumn(toon.dexterity.toString(), "Dex"),
-//                   _buildStatColumn(toon.charisma.toString(), "Cha"),
-//                 ],
-//               )),
-//         ),
-//       )
-//     ]),
-//   );
-// }
-
-// Widget LittleBox({child: const Text("Empty")}){
-//   return Container(
-//     child: child,
-//     decoration: BoxDecoration(
-//       border: Border.all(),
-//     ),
-//   );
-// }

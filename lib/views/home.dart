@@ -45,7 +45,7 @@ class HomePageState extends State<HomePage> {
                 ),
               ],
         ),
-        drawer: Drawer(child: ToonList()),
+        drawer: Drawer(child: ToonList(themeBloc: this.themeBloc,)),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.push(
