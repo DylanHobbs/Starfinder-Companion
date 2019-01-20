@@ -24,7 +24,7 @@ class _BasicViewState extends State<BasicView> {
   String name;
   double _imageHeight = 250.0;
   double _appBarHeight = 50.0;
-  double cardSize = 280.0;
+  double cardSize = 450.0;
   int currentIndex = 0;
   ScrollController _controller;
 
@@ -60,7 +60,31 @@ class _BasicViewState extends State<BasicView> {
     );
   }
 
-    /*
+  _buildSkillsScreen(Character toon){
+    List<int> statsList = [];
+    Map<String, int> statsMap = { 'Acrobatics': toon.acrobatics, 'Athletics': toon.athletics, 'Bluff': toon.bluff, 'Computers': toon.computers, 'Culture': toon.culture, 'Diplomacy': toon.diplomacy, 'Disguise': toon.disguise, 'Engineering': toon.engineering, 'Intimidate': toon.intimidate, 'Life Science': toon.lifeScience, 'Medicine': toon.medicine, 'Mysticism': toon.mysticism, 'Perception': toon.perception, 'Physical Science': toon.physicalScience, 'Piloting': toon.piloting, 'Profession': toon.profession, 'Sense Motive': toon.senseMotive,};
+    List<String> keys = statsMap.keys.toList();
+    List<int> values = statsMap.values.toList();
+    return ListView.builder(
+      itemCount: 17,
+      primary: true,
+      itemBuilder: (BuildContext context, int index){
+        String key = keys[index];
+        String value = keys[index];
+        return _buildSkillItem(key, 10, Icons.rowing);
+      },
+    );
+  }
+
+  _buildSkillItem(String label, int value, IconData icon){
+    return ListTile(
+      leading: Icon(Icons.casino),
+      title: Text(label, style: TextStyle(fontSize: 18),),
+      trailing: Text(value.toString(), style: TextStyle(fontSize: 23),),
+    );
+  }
+
+  /*
     Main Container
     Responsible for selecting charecter and bringing components together
     Including all animation
@@ -95,7 +119,7 @@ class _BasicViewState extends State<BasicView> {
               title: Text('${toon.name} | Level ${toon.level} | ${toon.klass}',
                   style: TextStyle(color: Colors.white)),
               iconTheme: IconThemeData(color: Colors.white),
-              expandedHeight: _imageHeight + _appBarHeight,
+              expandedHeight: _imageHeight + _appBarHeight-10,
               flexibleSpace: FlexibleSpaceBar(
                 background: Stack(
                   children: <Widget>[
@@ -109,7 +133,7 @@ class _BasicViewState extends State<BasicView> {
               itemExtent: cardSize,
               delegate: SliverChildListDelegate(
                 [
-                  _buildEmptyCard("Information Card"),
+                  _buildEmptyCard("Information Card", child: _buildSkillsScreen(toon)),
                   _buildEmptyCard("Spells Card"),
                   _buildEmptyCard("Combat Card"),
                   _buildEmptyCard("Roleplay Card"),
@@ -120,15 +144,15 @@ class _BasicViewState extends State<BasicView> {
         ));
   }
 
-  Widget _buildEmptyCard(String text) {
+  Widget _buildEmptyCard(String text, {Widget child}) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
       child: Container(
         width: 200,
-        height: 100,
+        height: cardSize,
         child: Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
-          child: Center(child: Text(text, style: TextStyle(fontSize: 30, color: Theme.of(context).accentColor),)),
+          child: child,
         ),
       ),
     );
@@ -189,7 +213,7 @@ class _BasicViewState extends State<BasicView> {
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: new Icon(FontAwesomeIcons.user),
-          title: new Text('Home'),
+          title: new Text('Stats'),
         ),
         BottomNavigationBarItem(
           icon: new Icon(FontAwesomeIcons.hatWizard),
@@ -239,7 +263,7 @@ class _BasicViewState extends State<BasicView> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(value.toString(), style: TextStyle(fontSize: size)),
-          Text("KAC", style: TextStyle(fontSize: size / 3)),
+          Text(label, style: TextStyle(fontSize: size / 3)),
         ],
       )),
       width: 50,
@@ -272,9 +296,9 @@ class _BasicViewState extends State<BasicView> {
 
   _buildStatsBlock() {
     return Padding(
-      padding: const EdgeInsets.only(left: 8, right: 8, bottom: 15),
+      padding: const EdgeInsets.only(left: 8, right: 8),
       child: Padding(
-          padding: const EdgeInsets.only(top: 30, bottom: 30),
+          padding: const EdgeInsets.only(top: 30),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -296,7 +320,7 @@ class _BasicViewState extends State<BasicView> {
   _buildBasicInfoScreen() {
     return new Padding(
       padding: new EdgeInsets.only(
-          left: 30, right: 30, top: _appBarHeight + 30, bottom: 15),
+          left: 30, right: 30, top: _appBarHeight + 30),
       child: Column(
         children: <Widget>[
           new Row(

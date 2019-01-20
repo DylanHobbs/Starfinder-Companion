@@ -27,6 +27,7 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: true,
         appBar: AppBar(
           title: Text('Starfinder Companion'),
           actions: <Widget>[
